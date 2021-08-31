@@ -21,14 +21,6 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
-    cart: [{
-      countInStock: Number,
-      image: String,
-      name: String,
-      price: Number,
-      product: String,
-      qty: Number
-    }]
   },
   {
     timestamps: true,

@@ -86,6 +86,26 @@ const ProfileScreen = ({ location, history }) => {
               ></Form.Control>
             </Form.Group>
 
+            <Form.Group controlId='password'>
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type='password'
+                placeholder='Enter password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='confirmPassword'>
+              <Form.Label>Confirm Password</Form.Label>
+              <Form.Control
+                type='password'
+                placeholder='Confirm password'
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
             <Button type='submit' variant='primary'>
               Update
             </Button>
@@ -105,6 +125,8 @@ const ProfileScreen = ({ location, history }) => {
                 <th>ID</th>
                 <th>DATE</th>
                 <th>TOTAL</th>
+                <th>PAID</th>
+                <th>DELIVERED</th>
                 <th></th>
               </tr>
             </thead>
@@ -113,7 +135,21 @@ const ProfileScreen = ({ location, history }) => {
                 <tr key={order._id}>
                   <td>{order._id}</td>
                   <td>{order.createdAt.substring(0, 10)}</td>
-                  <td>Rs. {order.totalPrice}</td>
+                  <td>{order.totalPrice}</td>
+                  <td>
+                    {order.isPaid ? (
+                      order.paidAt.substring(0, 10)
+                    ) : (
+                      <i className='fas fa-times' style={{ color: 'red' }}></i>
+                    )}
+                  </td>
+                  <td>
+                    {order.isDelivered ? (
+                      order.deliveredAt.substring(0, 10)
+                    ) : (
+                      <i className='fas fa-times' style={{ color: 'red' }}></i>
+                    )}
+                  </td>
                   <td>
                     <LinkContainer to={`/order/${order._id}`}>
                       <Button className='btn-sm' variant='light'>

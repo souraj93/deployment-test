@@ -38,7 +38,6 @@ const RegisterScreen = ({ location, history }) => {
 
   return (
     <FormContainer>
-      <div className="sign-in-wrapper">
       <h1>Sign Up</h1>
       {message && <Message variant='danger'>{message}</Message>}
       {error && <Message variant='danger'>{error}</Message>}
@@ -51,7 +50,6 @@ const RegisterScreen = ({ location, history }) => {
             placeholder='Enter name'
             value={name}
             onChange={(e) => setName(e.target.value)}
-            required
           ></Form.Control>
         </Form.Group>
 
@@ -62,7 +60,6 @@ const RegisterScreen = ({ location, history }) => {
             placeholder='Enter email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
           ></Form.Control>
         </Form.Group>
 
@@ -73,7 +70,6 @@ const RegisterScreen = ({ location, history }) => {
             placeholder='Enter password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           ></Form.Control>
         </Form.Group>
 
@@ -84,7 +80,6 @@ const RegisterScreen = ({ location, history }) => {
             placeholder='Confirm password'
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            required
           ></Form.Control>
         </Form.Group>
 
@@ -101,7 +96,6 @@ const RegisterScreen = ({ location, history }) => {
           </Link>
         </Col>
       </Row>
-      </div>
     </FormContainer>
   )
 }

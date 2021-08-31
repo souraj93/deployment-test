@@ -16,7 +16,7 @@ const LoginScreen = ({ location, history }) => {
   const userLogin = useSelector((state) => state.userLogin)
   const { loading, error, userInfo } = userLogin
 
-  let redirect = location.search ? location.search.split('=')[1] : '/'
+  const redirect = location.search ? location.search.split('=')[1] : '/'
 
   useEffect(() => {
     if (userInfo) {
@@ -31,8 +31,7 @@ const LoginScreen = ({ location, history }) => {
 
   return (
     <FormContainer>
-      <div className="sign-in-wrapper">
-      <h1 className="pt-0">Sign In</h1>
+      <h1>Sign In</h1>
       {error && <Message variant='danger'>{error}</Message>}
       {loading && <Loader />}
       <Form onSubmit={submitHandler}>
@@ -43,7 +42,6 @@ const LoginScreen = ({ location, history }) => {
             placeholder='Enter email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
           ></Form.Control>
         </Form.Group>
 
@@ -54,7 +52,6 @@ const LoginScreen = ({ location, history }) => {
             placeholder='Enter password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           ></Form.Control>
         </Form.Group>
 
@@ -62,7 +59,7 @@ const LoginScreen = ({ location, history }) => {
           Sign In
         </Button>
       </Form>
-      
+
       <Row className='py-3'>
         <Col>
           New Customer?{' '}
@@ -71,7 +68,6 @@ const LoginScreen = ({ location, history }) => {
           </Link>
         </Col>
       </Row>
-      </div>
     </FormContainer>
   )
 }

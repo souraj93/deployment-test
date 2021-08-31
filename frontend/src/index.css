@@ -2,6 +2,10 @@ main {
   min-height: 80vh;
 }
 
+h3 {
+  padding: 1rem 0;
+}
+
 h1 {
   font-size: 1.8rem;
   padding: 1rem 0;
@@ -12,21 +16,11 @@ h2 {
   padding: 0.5rem 0;
 }
 
-h3 {
-  font-size: 16px;
-  padding: 0.5rem 0;
-}
-
 .rating span {
   margin: 0.1rem;
 }
 
 /* carousel */
-.carousel {
-  border-radius: 6px;
-  background-color: #7b7f83 !important;
-}
-
 .carousel-item-next,
 .carousel-item-prev,
 .carousel-item.active {
@@ -37,7 +31,7 @@ h3 {
   top: 0;
 }
 
-.carousel-caption h3 {
+.carousel-caption h2 {
   color: #fff;
 }
 
@@ -52,102 +46,8 @@ h3 {
 .carousel a {
   margin: 0 auto;
 }
-
-.product-rating-wrapper {
-  width: auto;
-  border: 1px solid #ccc;
-  background-color: #185BDB;
-  border-radius: 6px;
-  padding: 2px 5px;
-  display: inline-block;
-  color: #fff;
-  font-size: 12px;
-}
-
-.product-price {
-  display: inline-block;
-  float: right;
-  color: #185BDB;
-}
-
-.custom-card {
-  box-shadow: 0 0 10px -4px rgb(0 0 0 / 75%);
-  -webkit-box-shadow: 0 0 10px -4px rgb(0 0 0 / 75%);
-  -moz-box-shadow: 0 0 10px -4px rgba(0,0,0,.75);
-  border: 0;
-}
-
-select {
-  padding: 2px !important;
-}
-
-.color-blue {
-  color: #185BDB;
-}
-
-.font-bold {
-  font-weight: 600;
-}
-.btn-primary, .btn-primary:disabled {
-  background-color: #185BDB;
-}
-
-.btn-outline-success, .btn-outline-success:disabled {
-  border-color: #185BDB;
-  color: #185BDB;
-}
-
-.navbar-dark .navbar-nav .nav-link {
-  color: #fff;
-}
-
-.bg-dark {
-  /* background-color: #7b7f83 !important; */
-}
-
-.navbar {
-  background-color: #2874f0 !important;
-}
-
-.sign-in-wrapper {
-  box-shadow: 0 0 10px -4px rgb(0 0 0 / 75%);
-    -webkit-box-shadow: 0 0 10px -4px rgb(0 0 0 / 75%);
-    -moz-box-shadow: 0 0 10px -4px rgba(0,0,0,.75);
-    border-radius: 6px;
-    padding: 20px;
-    /* transform: translateY(20%); */
-}
-
-.page-item.active .page-link {
-  background-color: #185BDB;
-    border-color: #185BDB;
-    border-radius: 6px;
-}
-
-.carousel-control-prev, .carousel-control-next {
-  width: auto;
-    background-color: #185BDB;
-    bottom: auto;
-    top: 45%;
-    border-radius: 50%;
-    padding: 10px;
-    left: 10px;
-}
-.carousel-control-next {
-    right: 10px;
-    left: auto;
-}
-.carousel-control-prev-icon, .carousel-control-next-icon {
-  width: 30px;
-    height: 30px;
-}
-
-.carousel-indicators {
-  display: none;
-}
-
 @media (max-width: 900px) {
-  .carousel-caption h3 {
+  .carousel-caption h2 {
     font-size: 2.5vw;
   }
 }

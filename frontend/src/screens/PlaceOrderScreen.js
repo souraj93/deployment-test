@@ -12,6 +12,12 @@ const PlaceOrderScreen = ({ history }) => {
   const dispatch = useDispatch()
 
   const cart = useSelector((state) => state.cart)
+
+  if (!cart.shippingAddress.address) {
+    history.push('/shipping')
+  } else if (!cart.paymentMethod) {
+    history.push('/payment')
+  }
   //   Calculate prices
   const addDecimals = (num) => {
     return (Math.round(num * 100) / 100).toFixed(2)
@@ -41,10 +47,11 @@ const PlaceOrderScreen = ({ history }) => {
   }, [history, success])
 
   const placeOrderHandler = () => {
-    // return;
     dispatch(
       createOrder({
         orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
         itemsPrice: cart.itemsPrice,
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
@@ -59,6 +66,21 @@ const PlaceOrderScreen = ({ history }) => {
       <Row>
         <Col md={8}>
           <ListGroup variant='flush'>
+            <ListGroup.Item>
+              <h2>Shipping</h2>
+              <p>
+                <strong>Address:</strong>
+                {cart.shippingAddress.address}, {cart.shippingAddress.city}{' '}
+                {cart.shippingAddress.postalCode},{' '}
+                {cart.shippingAddress.country}
+              </p>
+            </ListGroup.Item>
+
+            <ListGroup.Item>
+              <h2>Payment Method</h2>
+              <strong>Method: </strong>
+              {cart.paymentMethod}
+            </ListGroup.Item>
 
             <ListGroup.Item>
               <h2>Order Items</h2>
@@ -69,7 +91,7 @@ const PlaceOrderScreen = ({ history }) => {
                   {cart.cartItems.map((item, index) => (
                     <ListGroup.Item key={index}>
                       <Row>
-                        <Col md={2}>
+                        <Col md={1}>
                           <Image
                             src={item.image}
                             alt={item.name}
@@ -77,13 +99,13 @@ const PlaceOrderScreen = ({ history }) => {
                             rounded
                           />
                         </Col>
-                        <Col md={6}>
+                        <Col>
                           <Link to={`/product/${item.product}`}>
                             {item.name}
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x Rs. {item.price} = <span className="color-blue">Rs. {item.qty * item.price}</span>
+                          {item.qty} x ${item.price} = ${item.qty * item.price}
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -102,31 +124,30 @@ const PlaceOrderScreen = ({ history }) => {
               <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
-                  <Col className="color-blue">Rs. {cart.itemsPrice}</Col>
+                  <Col>${cart.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping</Col>
-                  <Col className="color-blue">Rs. {cart.shippingPrice}</Col>
+                  <Col>${cart.shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
-                  <Col className="color-blue">Rs. {cart.taxPrice}</Col>
+                  <Col>${cart.taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
-                  <Col className="color-blue">Rs. {cart.totalPrice}</Col>
+                  <Col>${cart.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              {error ?
               <ListGroup.Item>
-                <Message variant='danger'>{error}</Message>
-              </ListGroup.Item> : null}
+                {error && <Message variant='danger'>{error}</Message>}
+              </ListGroup.Item>
               <ListGroup.Item>
                 <Button
                   type='button'

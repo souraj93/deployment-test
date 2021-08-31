@@ -33,17 +33,15 @@ const ProductScreen = ({ history, match }) => {
   } = productReviewCreate
 
   useEffect(() => {
-    // if (successProductReview) {
-    //   setRating(0)
-    //   setComment('')
-    // }
-    // if (!product._id || product._id !== match.params.id) {
-    //   dispatch(listProductDetails(match.params.id))
-    //   dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
-    // }
-    dispatch(listProductDetails(match.params.id))
-    dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
-  }, [match.params.id, dispatch])
+    if (successProductReview) {
+      setRating(0)
+      setComment('')
+    }
+    if (!product._id || product._id !== match.params.id) {
+      dispatch(listProductDetails(match.params.id))
+      dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
+    }
+  }, [dispatch, match, successProductReview])
 
   const addToCartHandler = () => {
     history.push(`/cart/${match.params.id}?qty=${qty}`)
@@ -86,7 +84,7 @@ const ProductScreen = ({ history, match }) => {
                     text={`${product.numReviews} reviews`}
                   />
                 </ListGroup.Item>
-                <ListGroup.Item className="color-blue font-bold">Price: Rs. {product.price}</ListGroup.Item>
+                <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
                 <ListGroup.Item>
                   Description: {product.description}
                 </ListGroup.Item>
@@ -99,7 +97,7 @@ const ProductScreen = ({ history, match }) => {
                     <Row>
                       <Col>Price:</Col>
                       <Col>
-                        <strong>Rs. {product.price}</strong>
+                        <strong>${product.price}</strong>
                       </Col>
                     </Row>
                   </ListGroup.Item>
@@ -151,24 +149,19 @@ const ProductScreen = ({ history, match }) => {
             </Col>
           </Row>
           <Row>
-            <Col md={12}>
+            <Col md={6}>
               <h2>Reviews</h2>
-              
+              {product.reviews.length === 0 && <Message>No Reviews</Message>}
               <ListGroup variant='flush'>
-                <Row>
-                  <Col md={6}>
-                  {product.reviews.length === 0 && <Message>No Reviews</Message>}
-                    {product.reviews.map((review) => (
-                    <ListGroup.Item key={review._id}>
-                      <strong>{review.name}</strong>
-                      <Rating value={review.rating} />
-                      <p>{review.createdAt.substring(0, 10)}</p>
-                      <p>{review.comment}</p>
-                    </ListGroup.Item>
-                  ))}
-                  </Col>
-                  <Col md={6}>
-                  <ListGroup.Item>
+                {product.reviews.map((review) => (
+                  <ListGroup.Item key={review._id}>
+                    <strong>{review.name}</strong>
+                    <Rating value={review.rating} />
+                    <p>{review.createdAt.substring(0, 10)}</p>
+                    <p>{review.comment}</p>
+                  </ListGroup.Item>
+                ))}
+                <ListGroup.Item>
                   <h2>Write a Customer Review</h2>
                   {successProductReview && (
                     <Message variant='success'>
@@ -206,7 +199,7 @@ const ProductScreen = ({ history, match }) => {
                         ></Form.Control>
                       </Form.Group>
                       <Button
-                        disabled={loadingProductReview || !['1','2','3','4','5'].includes(rating)}
+                        disabled={loadingProductReview}
                         type='submit'
                         variant='primary'
                       >
@@ -219,10 +212,6 @@ const ProductScreen = ({ history, match }) => {
                     </Message>
                   )}
                 </ListGroup.Item>
-                  </Col>
-                </Row>
-                
-                
               </ListGroup>
             </Col>
           </Row>
