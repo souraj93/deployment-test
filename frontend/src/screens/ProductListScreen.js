@@ -7,8 +7,7 @@ import Loader from '../components/Loader'
 import Paginate from '../components/Paginate'
 import {
   listProducts,
-  deleteProduct,
-  createProduct,
+  deleteProduct
 } from '../actions/productActions'
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
 
@@ -67,7 +66,8 @@ const ProductListScreen = ({ history, match }) => {
   }
 
   const createProductHandler = () => {
-    dispatch(createProduct())
+    // dispatch(createProduct())
+    history.push('/admin/product/add');
   }
 
   return (
@@ -99,7 +99,6 @@ const ProductListScreen = ({ history, match }) => {
                 <th>NAME</th>
                 <th>PRICE</th>
                 <th>CATEGORY</th>
-                <th>BRAND</th>
                 <th></th>
               </tr>
             </thead>
@@ -110,7 +109,6 @@ const ProductListScreen = ({ history, match }) => {
                   <td>{product.name}</td>
                   <td>${product.price}</td>
                   <td>{product.category}</td>
-                  <td>{product.brand}</td>
                   <td>
                     <LinkContainer to={`/admin/product/${product._id}/edit`}>
                       <Button variant='light' className='btn-sm'>

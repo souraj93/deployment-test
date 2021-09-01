@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import YouTube from 'react-youtube';
 import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
 import Rating from '../components/Rating'
 import Message from '../components/Message'
@@ -10,12 +11,14 @@ import {
   listProductDetails,
   createProductReview,
 } from '../actions/productActions'
-import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
+import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants';
 
 const ProductScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1)
   const [rating, setRating] = useState(0)
   const [comment, setComment] = useState('')
+  const [currentImage, updateCurrentImage] = useState('');
+  const [videoDisplayed, toggleVideoDisplayed] = useState(false);
 
   const dispatch = useDispatch()
 
@@ -32,16 +35,25 @@ const ProductScreen = ({ history, match }) => {
     error: errorProductReview,
   } = productReviewCreate
 
+  const opts = {
+    height: '390',
+    width: '100%',
+    playerVars: {
+      // https://developers.google.com/youtube/player_parameters
+      autoplay: 1,
+    },
+  };
+
   useEffect(() => {
     if (successProductReview) {
       setRating(0)
       setComment('')
     }
-    if (!product._id || product._id !== match.params.id) {
+    if (product && (!product._id || product._id !== match.params.id)) {
       dispatch(listProductDetails(match.params.id))
       dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
     }
-  }, [dispatch, match, successProductReview])
+  }, [dispatch, match, successProductReview, product])
 
   const addToCartHandler = () => {
     history.push(`/cart/${match.params.id}?qty=${qty}`)
@@ -57,6 +69,15 @@ const ProductScreen = ({ history, match }) => {
     )
   }
 
+  const changeCurrentImage = (index) => {
+    updateCurrentImage(product.images[index].url);
+    toggleVideoDisplayed(false);
+  };
+
+  const playVideo = () => {
+    toggleVideoDisplayed(true);
+  };
+
   return (
     <>
       <Link className='btn btn-light my-3' to='/'>
@@ -71,7 +92,30 @@ const ProductScreen = ({ history, match }) => {
           <Meta title={product.name} />
           <Row>
             <Col md={6}>
-              <Image src={product.image} alt={product.name} fluid />
+              <Row>
+              {product.images && product.images.length ?
+                <>
+                <Col xs={3}>
+                  <ul className="pl-0">
+                    {product.images.map((imgUrl, ind) => {
+                      return <li key={ind} className="img-list-item" onClick={() => changeCurrentImage(ind)}><Image src={imgUrl.url} alt={product.name} /></li>
+                    })}
+                    {product.videoUrl ?
+                    <li className="img-list-item pos-relative" onClick={playVideo}><Image src={product.images[0].url} alt={product.name} />
+                    <div className="play-video-icon-wrapper">
+                      <i className="fas fa-play"></i>
+                    </div>
+                    </li> : null}
+                  </ul>
+                </Col>
+                <Col xs={9} className="text-center">
+                  {!videoDisplayed ?
+                  <Image src={currentImage || product.images[0].url} alt={product.name} fluid />
+                  : <YouTube videoId={product.videoUrl} opts={opts} />}
+                </Col>
+                </>
+                : null}
+              </Row>
             </Col>
             <Col md={3}>
               <ListGroup variant='flush'>

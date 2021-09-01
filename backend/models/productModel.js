@@ -27,13 +27,14 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    image: {
-      type: String,
-      required: true,
-    },
-    brand: {
-      type: String,
-      required: true,
+    images: [{
+      url: {
+        type: String,
+        required: true
+      }
+    }],
+    videoUrl: {
+      type: String
     },
     category: {
       type: String,
@@ -61,7 +62,6 @@ const productSchema = mongoose.Schema(
     },
     countInStock: {
       type: Number,
-      required: true,
       default: 0,
     },
   },
