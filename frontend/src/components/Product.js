@@ -10,21 +10,14 @@ const Product = ({ product }) => {
         <Card.Img src={product.images[0].url} variant='top' />
       </Link>
 
-      <Card.Body>
+      <Card.Body className="pb-0 pl-0 pr-0">
         <Link to={`/product/${product._id}`}>
-          <Card.Title as='div'>
+          <Card.Title as='div' className="mb-0">
             <strong>{product.name}</strong>
           </Card.Title>
         </Link>
 
-        <Card.Text as='div'>
-          <Rating
-            value={product.rating}
-            text={`${product.numReviews} reviews`}
-          />
-        </Card.Text>
-
-        <Card.Text as='h3'>${product.price}</Card.Text>
+        <Card.Text as='h3' className="pt-2 pb-2">Rs. {product.price}</Card.Text>
       </Card.Body>
     </Card>
   )

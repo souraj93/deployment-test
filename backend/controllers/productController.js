@@ -14,8 +14,9 @@ const getProducts = asyncHandler(async (req, res) => {
           $regex: req.query.keyword,
           $options: 'i',
         },
+        status: 1
       }
-    : {}
+    : {status: 1}
 
   const count = await Product.countDocuments({ ...keyword })
   const products = await Product.find({ ...keyword })
@@ -46,7 +47,9 @@ const deleteProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id)
 
   if (product) {
-    await product.remove()
+    product.status = 2;
+
+    await product.save();
     res.json({ message: 'Product removed' })
   } else {
     res.status(404)
@@ -74,22 +77,20 @@ const updateProduct = asyncHandler(async (req, res) => {
     name,
     price,
     description,
-    image,
-    brand,
+    images,
     category,
-    countInStock,
+    videoUrl,
   } = req.body
 
   const product = await Product.findById(req.params.id)
 
   if (product) {
     product.name = name
+    product.videoUrl = videoUrl
     product.price = price
     product.description = description
-    product.image = image
-    product.brand = brand
+    product.images = images
     product.category = category
-    product.countInStock = countInStock
 
     const updatedProduct = await product.save()
     res.json(updatedProduct)

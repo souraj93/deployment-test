@@ -14,11 +14,10 @@ const ProductEditScreen = ({ match, history }) => {
 
   const [name, setName] = useState('')
   const [price, setPrice] = useState(0)
-  const [image, setImage] = useState('')
+  const [images, setImages] = useState([''])
   const [category, setCategory] = useState('')
-  const [countInStock, setCountInStock] = useState(0)
+  const [videoUrl, setVideoUrl] = useState('')
   const [description, setDescription] = useState('')
-  const [uploading, setUploading] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -41,37 +40,14 @@ const ProductEditScreen = ({ match, history }) => {
         dispatch(listProductDetails(productId))
       } else {
         setName(product.name)
+        setVideoUrl(product.videoUrl)
         setPrice(product.price)
-        setImage(product.image)
+        setImages(product.images)
         setCategory(product.category)
-        setCountInStock(product.countInStock)
         setDescription(product.description)
       }
     }
   }, [dispatch, history, productId, product, successUpdate])
-
-  const uploadFileHandler = async (e) => {
-    const file = e.target.files[0]
-    const formData = new FormData()
-    formData.append('image', file)
-    setUploading(true)
-
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-
-      const { data } = await axios.post('/api/upload', formData, config)
-
-      setImage(data)
-      setUploading(false)
-    } catch (error) {
-      console.error(error)
-      setUploading(false)
-    }
-  }
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -80,13 +56,25 @@ const ProductEditScreen = ({ match, history }) => {
         _id: productId,
         name,
         price,
-        image,
+        images,
         category,
         description,
-        countInStock,
+        videoUrl
       })
     )
   }
+
+  const updateImage = (imgUrl, index) => {
+    const localImages = [...images];
+    localImages[index].url = imgUrl;
+    setImages([...localImages]);
+  };
+
+  const addMoreImage = () => {
+    const localImages = [...images];
+    localImages.push({url: ""});
+    setImages([...localImages]);
+  };
 
   return (
     <>
@@ -124,29 +112,28 @@ const ProductEditScreen = ({ match, history }) => {
             </Form.Group>
 
             <Form.Group controlId='image'>
-              <Form.Label>Image</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter image url'
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-              ></Form.Control>
-              <Form.File
-                id='image-file'
-                label='Choose File'
-                custom
-                onChange={uploadFileHandler}
-              ></Form.File>
-              {uploading && <Loader />}
+              <Form.Label>Images</Form.Label>
+              {images.map((img, ind) => {
+                  return <Form.Control
+                    key={ind}
+                    type='text'
+                    placeholder={`Enter image ${ind + 1} url`}
+                    value={images[ind].url}
+                    onChange={(e) => updateImage(e.target.value, ind)}
+                    ></Form.Control>
+              })}
+              <Button type='button' variant='primary' onClick={addMoreImage}>
+                +
+              </Button>
             </Form.Group>
 
-            <Form.Group controlId='countInStock'>
-              <Form.Label>Count In Stock</Form.Label>
+            <Form.Group controlId='video'>
+              <Form.Label>Video</Form.Label>
               <Form.Control
-                type='number'
-                placeholder='Enter countInStock'
-                value={countInStock}
-                onChange={(e) => setCountInStock(e.target.value)}
+                type='text'
+                placeholder='Enter video url'
+                value={videoUrl}
+                onChange={(e) => setVideoUrl(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
