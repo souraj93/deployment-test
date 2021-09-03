@@ -6,6 +6,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
 import { createProduct } from '../actions/productActions'
+import { listCategories } from '../actions/categoryActions'
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
 
 const ProductAddScreen = ({ match, history }) => {
@@ -23,6 +24,9 @@ const ProductAddScreen = ({ match, history }) => {
   const productDetails = useSelector((state) => state.productDetails)
   const { loading, error } = productDetails
 
+  const categoryList = useSelector((state) => state.categoryList)
+  const { categories } = categoryList
+
   const productCreate = useSelector((state) => state.productCreate)
   const {
     loading: loadingUpdate,
@@ -32,6 +36,11 @@ const ProductAddScreen = ({ match, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault()
+    // return;
+    if (!images.length) {
+      alert('Please add atleast one image');
+      return;
+    }
     dispatch(
       createProduct({
         name,
@@ -57,11 +66,18 @@ const ProductAddScreen = ({ match, history }) => {
   };
 
   useEffect(() => {
+    dispatch(listCategories('', 1))
     if (successUpdate) {
       dispatch({ type: PRODUCT_CREATE_RESET })
       history.push('/admin/productlist')
     }
   }, [dispatch, history, successUpdate])
+
+  useEffect(() => {
+    if (categories && categories.length) {
+      setCategory(categories[0]._id);
+    }
+  }, [categories]);
 
   return (
     <>
@@ -83,6 +99,7 @@ const ProductAddScreen = ({ match, history }) => {
               <Form.Control
                 type='name'
                 placeholder='Enter name'
+                required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               ></Form.Control>
@@ -94,6 +111,7 @@ const ProductAddScreen = ({ match, history }) => {
                 type='number'
                 placeholder='Enter price'
                 value={price}
+                required
                 onChange={(e) => setPrice(e.target.value)}
               ></Form.Control>
             </Form.Group>
@@ -136,12 +154,18 @@ const ProductAddScreen = ({ match, history }) => {
 
             <Form.Group controlId='category'>
               <Form.Label>Category</Form.Label>
-              <Form.Control
+              {categories && categories.length ?
+              <select className="form-control" value={category} onChange={e => setCategory(e.target.value)}>
+                {categories.map(cat => {
+                  return <option key={cat._id} value={cat._id}>{cat.name}</option>
+                })}
+              </select> : null}
+              {/* <Form.Control
                 type='text'
                 placeholder='Enter category'
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-              ></Form.Control>
+              ></Form.Control> */}
             </Form.Group>
 
             <Form.Group controlId='description'>
@@ -149,6 +173,7 @@ const ProductAddScreen = ({ match, history }) => {
               <Form.Control
                 type='text'
                 placeholder='Enter description'
+                required
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               ></Form.Control>

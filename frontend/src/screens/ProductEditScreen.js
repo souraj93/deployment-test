@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
@@ -7,6 +6,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
 import { listProductDetails, updateProduct } from '../actions/productActions'
+import { listCategories } from '../actions/categoryActions'
 import { PRODUCT_UPDATE_RESET } from '../constants/productConstants'
 
 const ProductEditScreen = ({ match, history }) => {
@@ -21,6 +21,9 @@ const ProductEditScreen = ({ match, history }) => {
 
   const dispatch = useDispatch()
 
+  const categoryList = useSelector((state) => state.categoryList)
+  const { categories } = categoryList
+
   const productDetails = useSelector((state) => state.productDetails)
   const { loading, error, product } = productDetails
 
@@ -32,25 +35,43 @@ const ProductEditScreen = ({ match, history }) => {
   } = productUpdate
 
   useEffect(() => {
-    if (successUpdate) {
-      dispatch({ type: PRODUCT_UPDATE_RESET })
-      history.push('/admin/productlist')
-    } else {
-      if (!product.name || product._id !== productId) {
-        dispatch(listProductDetails(productId))
+    if (categories && categories.length) {
+      if (successUpdate) {
+        dispatch({ type: PRODUCT_UPDATE_RESET })
+        history.push('/admin/productlist')
       } else {
-        setName(product.name)
-        setVideoUrl(product.videoUrl)
-        setPrice(product.price)
-        setImages(product.images)
-        setCategory(product.category)
-        setDescription(product.description)
+        if (!product.name || product._id !== productId) {
+          dispatch(listProductDetails(productId))
+        } else {
+          setName(product.name)
+          setVideoUrl(product.videoUrl)
+          setPrice(product.price)
+          setImages(product.images)
+          // setCategory(product.category)
+          setDescription(product.description)
+          if (categories && categories.length) {
+            categories.forEach(cat => {
+              if (cat._id === product.category) {
+                setCategory(cat._id);
+              }
+            })
+          }
+        }
       }
     }
-  }, [dispatch, history, productId, product, successUpdate])
+  }, [dispatch, history, productId, product, successUpdate, categories])
+
+  useEffect(() => {
+    dispatch(listCategories('', 1));
+  }, [dispatch])
 
   const submitHandler = (e) => {
     e.preventDefault()
+
+    if (!images.length) {
+      alert('Please add atleast one image');
+      return;
+    }
     dispatch(
       updateProduct({
         _id: productId,
@@ -95,6 +116,7 @@ const ProductEditScreen = ({ match, history }) => {
               <Form.Label>Name</Form.Label>
               <Form.Control
                 type='name'
+                required
                 placeholder='Enter name'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -106,6 +128,7 @@ const ProductEditScreen = ({ match, history }) => {
               <Form.Control
                 type='number'
                 placeholder='Enter price'
+                required
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
               ></Form.Control>
@@ -139,12 +162,18 @@ const ProductEditScreen = ({ match, history }) => {
 
             <Form.Group controlId='category'>
               <Form.Label>Category</Form.Label>
-              <Form.Control
+              {categories && categories.length ?
+              <select className="form-control" value={category} onChange={e => setCategory(e.target.value)}>
+                {categories.map(cat => {
+                  return <option key={cat._id} value={cat._id}>{cat.name}</option>
+                })}
+              </select> : null}
+              {/* <Form.Control
                 type='text'
                 placeholder='Enter category'
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-              ></Form.Control>
+              ></Form.Control> */}
             </Form.Group>
 
             <Form.Group controlId='description'>
@@ -152,6 +181,7 @@ const ProductEditScreen = ({ match, history }) => {
               <Form.Control
                 type='text'
                 placeholder='Enter description'
+                required
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               ></Form.Control>
