@@ -88,6 +88,13 @@ h2 {
   background-color: rgba(0,0,0,0.3);
 }
 
+.home-pill-category {
+  font-size: 16px;
+  padding: 5px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
 @media (max-width: 900px) {
   .carousel-caption h2 {
     font-size: 2.5vw;
