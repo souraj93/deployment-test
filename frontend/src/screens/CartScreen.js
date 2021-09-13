@@ -24,11 +24,11 @@ const CartScreen = ({ match, location, history }) => {
   const orderCreate = useSelector((state) => state.orderCreate)
   const { success, error } = orderCreate
 
-  useEffect(() => {
-    if (productId) {
-      dispatch(addToCart(productId, qty))
-    }
-  }, [dispatch, productId, qty])
+  // useEffect(() => {
+  //   if (productId) {
+  //     dispatch(addToCart(productId, qty))
+  //   }
+  // }, [dispatch, productId, qty])
 
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCart(id))
@@ -80,7 +80,7 @@ const CartScreen = ({ match, location, history }) => {
 
   return (
     <Row>
-      <div className={`modal fade ${openModal ? 'show modal-display-class' : ''}`} id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div className={`modal fade ${openModal ? 'show modal-display-class' : ''}`} id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
@@ -103,14 +103,14 @@ const CartScreen = ({ match, location, history }) => {
                 {error ? 
                 <Message variant='danger'>{error}</Message> : null}
                 <div className="form-group">
-                  <label for="recipient-name" className="col-form-label">Enter contact number</label>
+                  <label htmlFor="recipient-name" className="col-form-label">Enter 10 digit mobile number</label>
                   <input type="text" className="form-control" id="recipient-name" value={contactNumber} onChange={e => {changeContactNumber(e.target.value.replace(/\D/, '')); toggleError(false); }} required maxLength={10} />
                 </div>
               </form>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => { toggleModal(false); changeContactNumber(""); }}>Close</button>
-              <button type="button" className="btn btn-primary" onClick={sendToSeller}>Send</button>
+              <button type="button" className="btn btn-primary" onClick={sendToSeller} disabled={success}>Send</button>
             </div>
           </div>
         </div>

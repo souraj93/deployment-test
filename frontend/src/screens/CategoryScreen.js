@@ -116,7 +116,7 @@ const CategoryListScreen = ({ history, match }) => {
     return (
         <>
             <Row>
-                <div className={`modal fade ${openModal ? 'show modal-display-class' : ''}`} id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className={`modal fade ${openModal ? 'show modal-display-class' : ''}`} id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -128,7 +128,7 @@ const CategoryListScreen = ({ history, match }) => {
                             <div className="modal-body">
                                 <form>
                                     <div className="form-group">
-                                        <label for="recipient-name" className="col-form-label">Category Name:</label>
+                                        <label htmlFor="recipient-name" className="col-form-label">Category Name:</label>
                                         <input type="text" className="form-control" id="recipient-name" value={name} onChange={e => changeName(e.target.value)} />
                                     </div>
                                 </form>

@@ -95,6 +95,48 @@ h2 {
   cursor: pointer;
 }
 
+.whole-categories-wrapper {
+  position: relative;
+  padding: 0;
+}
+
+.categories-wrapper {
+  padding: 15px;
+  border-radius: 8px;
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;
+}
+
+.categories-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.next-button-wrapper {
+  height: 45px;
+  width: 45px;
+  color: #185BDB;
+  background-color: #ffffff;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 1px solid #E6ECF8;
+  font-size: 14px;
+}
+
+.prev-button-wrapper {
+  height: 45px;
+  background-color: #ffffff;
+  color: #185BDB;
+  border-radius: 50%;
+  width: 45px;
+  cursor: pointer;
+  margin-right: 10px;
+  border: 1px solid #E6ECF8;
+  font-size: 14px;
+}
+
 @media (max-width: 900px) {
   .carousel-caption h2 {
     font-size: 2.5vw;

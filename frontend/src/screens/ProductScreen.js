@@ -10,15 +10,20 @@ import {
   listProductDetails,
 } from '../actions/productActions'
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants';
+import { addToCart } from '../actions/cartActions';
 
 const ProductScreen = ({ history, match }) => {
   const [currentImage, updateCurrentImage] = useState('');
   const [videoDisplayed, toggleVideoDisplayed] = useState(false);
+  const [alreadyInCart, updateCartPresent] = useState(false);
 
   const dispatch = useDispatch()
 
   const productDetails = useSelector((state) => state.productDetails)
   const { loading, error, product } = productDetails
+
+  const cart = useSelector((state) => state.cart)
+  const { cartItems } = cart
 
   const opts = {
     height: '390',
@@ -37,7 +42,8 @@ const ProductScreen = ({ history, match }) => {
   }, [dispatch, match, product])
 
   const addToCartHandler = () => {
-    history.push(`/cart/${match.params.id}?qty=${1}`)
+    dispatch(addToCart(match.params.id, 1));
+    // history.push(`/cart/${match.params.id}?qty=${1}`)
   }
 
   const changeCurrentImage = (index) => {
@@ -48,6 +54,16 @@ const ProductScreen = ({ history, match }) => {
   const playVideo = () => {
     toggleVideoDisplayed(true);
   };
+
+  useEffect(() => {
+    if (cartItems && cartItems.length) {
+      cartItems.forEach(each => {
+        if (each.product === match.params.id) {
+          updateCartPresent(true);
+        }
+      })
+    }
+  }, [cartItems]);
 
   return (
     <>
@@ -148,8 +164,10 @@ const ProductScreen = ({ history, match }) => {
                       onClick={addToCartHandler}
                       className='btn-block'
                       type='button'
+                      disabled={alreadyInCart}
                     >
-                      Add To Cart
+                      {!alreadyInCart ?
+                      "Add To Cart" : "Already in Cart"}
                     </Button>
                   </ListGroup.Item>
                 </ListGroup>
