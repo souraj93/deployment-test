@@ -37,6 +37,12 @@ const HomeScreen = ({ match, history }) => {
     }
   }, [dispatch, prodCategories])
 
+  useEffect(() => {
+    if (window.location.pathname === "/") {
+      history.push('/page/1');
+    }
+  }, [window.location.pathname])
+
   const chooseCategory = (category, ind) => {
     const localProdCat = [...prodCategories];
     const localSelected = [...selectedCategories];

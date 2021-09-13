@@ -102,7 +102,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 })
 
 const getProductsCustomer = asyncHandler(async (req, res) => {
-  const pageSize = 1
+  const pageSize = 10
   const page = Number(req.query.pageNumber) || 1
   let cats = [];
   if (req.body && req.body.categories) {

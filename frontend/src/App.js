@@ -68,7 +68,7 @@ const App = () => {
             component={HomeScreen}
             exact
           />
-          <Redirect from='/' to='/page/1' exact />
+          <Route path='/' component={HomeScreen} exact />
         </Container>
       </main>
       <Footer />
